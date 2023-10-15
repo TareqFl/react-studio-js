@@ -5,11 +5,12 @@
 ![Screenshot](img/ref_1.png?raw=true "stem tracks mute solo volume control")
 
 features
-Record track
-cut
-split
-shift track
-CRUD operations for Annotations
+Record track,
+cut,
+split,
+shift track,
+CRUD operations for Annotations,
+save to local storage(optional)
 
 
 ## Browser Support
