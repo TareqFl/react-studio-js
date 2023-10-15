@@ -2,7 +2,7 @@ import _assign from "lodash.assign";
 import _forOwn from "lodash.forown";
 
 import { v4 as uuidv4 } from "uuid";
-import {h} from "virtual-dom";
+import h from "virtual-dom/h";
 
 import extractPeaks from "webaudio-peaks";
 import { FADEIN, FADEOUT } from "fade-maker";
@@ -564,20 +564,6 @@ export default class {
     const numChan = this.peaks.data.length;
     const widgets = data.controls.widgets;
 
-    // const removeTrack = h(
-    //   "button.btn.btn-danger.btn-xs.track-remove",
-    //   {
-    //     attributes: {
-    //       id:'remove',
-    //       type: "button",
-    //       title: "Remove track",
-    //     },
-    //     onclick: () => {
-    //       this.ee.emit("removeTrack", this);
-    //     },
-    //   },
-    //   [h("i.fas.fa-times")]
-    // );
     const removeTrack = h(
       "button.btn.btn-danger.btn-xs.track-remove",
       {
@@ -590,9 +576,12 @@ export default class {
           this.ee.emit("removeTrack", this);
         },
       },
-      // [h("i.fas.fa-times")]
+      [h("i.fas.fa-times")]
     );
- 
+
+    // const trackName = h("span",{attributes:{
+    //   id:'trackName'
+    // }}, [this.name]);
 
     const collapseTrack = h(
       "button.btn.btn-info.btn-xs.track-collapse",
@@ -616,7 +605,7 @@ export default class {
     if (widgets.remove) {
       headerChildren.push(removeTrack);
     }
-
+    // headerChildren.push(trackName);
     if (widgets.collapse) {
       headerChildren.push(collapseTrack);
     }
@@ -710,7 +699,6 @@ export default class {
   }
 
   render(data) {
-    const borderRadius = data.borderRadius
     const width = this.peaks.length;
     const playbackX = secondsToPixels(
       data.playbackSeconds,
@@ -780,8 +768,7 @@ export default class {
               scale,
               data.height,
               data.barWidth,
-              data.barGap,
-              data.borderRadius
+              data.barGap
             ),
           })
         );

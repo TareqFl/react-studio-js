@@ -58,13 +58,7 @@ class AnnotationList {
   }
 
   setupEE(ee) {
-    // Clear Annotations
-    ee.on('clearAnnotations',()=>{
-      this.annotations = []
-      this.setupInteractions()
-      this.playlist.drawRequest()
-      this.playlist.draw(this.playlist.render())
-    })
+  
     ee.on('addAnnotation', value=>{
     for (const annotation of value){
         this.annotations.push(inputAeneas(annotation))

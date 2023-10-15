@@ -78,7 +78,6 @@ export function init(options = {}, ee = EventEmitter()) {
   playlist.setSeekStyle(config.seekStyle);
   playlist.setAnnotations(config.annotationList);
   playlist.setBarGap(config.barGap);
-  playlist.setBorderRadius(config.borderRadius)
   playlist.setBarWidth(config.barWidth);
   playlist.isAutomaticScroll = config.isAutomaticScroll;
   playlist.isContinuousPlay = config.isContinuousPlay;

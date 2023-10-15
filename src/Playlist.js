@@ -31,7 +31,6 @@ export default class {
     this.scrollLeft = 0;
     this.scrollTimer = undefined;
     this.showTimescale = false;
-
     // whether a user is scrolling the waveform
     this.isScrolling = false;
 
@@ -41,6 +40,7 @@ export default class {
     this.durationFormat = "hh:mm:ss.uuu";
     this.isAutomaticScroll = false;
     this.resetDrawTimer = undefined;
+
   }
 
 
@@ -49,8 +49,6 @@ export default class {
     this.exportWorker = new InlineWorker(ExportWavWorkerFunction);
   }
   
-
-
   // TODO extract into a plugin
   initRecorder(stream) {
     this.mediaRecorder = new MediaRecorder(stream);
@@ -174,10 +172,6 @@ export default class {
     this.barGap = width;
   }
 
-  setBorderRadius(borderRadius){
-    this.borderRadius = borderRadius
-  }
-
   setAnnotations(config) {
     const controlWidth = this.controls.show ? this.controls.width : 0;
     this.annotationList = new AnnotationList(
@@ -210,8 +204,10 @@ export default class {
 
   setUpEventEmitter() {
     const ee = this.ee;
-
-
+    // Clear All Annotations
+ee.on('clearAnnotations',()=>{
+  this.annotationList.annotations = []
+})
   //  update track cursor when slider changes on demand
   ee.on('sliderTimeUpdate', value =>{
   const newValue = Math.floor(value)
@@ -219,6 +215,9 @@ export default class {
   this.seek(newValue, newValue, this.tracks[0])
   ee.emit('timeupdate', value)
   this.drawRequest()
+
+  this.seek(value, value);
+ee.emit("play", value);
 
 })
 // ==========================================>
@@ -240,13 +239,11 @@ export default class {
       } else {
         // reset if it was paused.
         this.seek(start, end, track);
-        this.ee.emit("timeupdate", start);
+        // this.ee.emit("timeupdate", start);
        
         this.drawRequest();
       }
-     if(start > 0){
-      ee.emit('enableSplit', false)
-     }
+     
       if(end > start){
        return ee.emit('enableCut', false)
       }else {
@@ -315,17 +312,10 @@ export default class {
     });
 
     ee.on("removeTrack", (track) => {
-      // Delete Track from storage
       ee.emit('removeTrackFromDb', track)
-      
       this.removeTrack(track);
       this.adjustTrackPlayout();
       this.drawRequest();
-      // Clear Annotations if no more tracks are found
-      if(this.tracks.length ===0){
-        ee.emit('clearAnnotations', ()=>console.log(this.tracks.length))
-      }
-
     
     });
 
@@ -475,7 +465,6 @@ export default class {
   }
 
   load(trackList) {
-this.ee.emit('audiosources_rendering')
     const loadPromises = trackList.map((trackInfo) => {
       const loader = LoaderFactory.createLoader(
         trackInfo.src,
@@ -584,13 +573,12 @@ this.ee.emit('audiosources_rendering')
         this.ee.emit("audiosourcesrendered");
         // Emit duration in order to add to customTimeLine component
         this.ee.emit("getTrackDuration", this.duration)
-
+        
      
       })
       .catch((e) => {
         this.ee.emit("audiosourceserror", e);
       });
-
   }
 
   createTrackFromSplit({ trackToSplit, name, splitTime,id }) {
@@ -668,7 +656,7 @@ this.ee.emit('audiosources_rendering')
     this.draw(this.render());
     this.setActiveTrack(track);
     // save to indexDb after splut
-    this.ee.emit("audiosourcesrendered");
+    // this.ee.emit("audiosourcesrendered");
     this.ee.emit('saveToLocalFromSplit', {trackToSplit, track})
   }
 
@@ -882,7 +870,7 @@ this.ee.emit('audiosources_rendering')
       0
     );
        // emit new track duration after cut
-       this.ee.emit('newTimeDurationAfterEdit', this.duration)
+      //  this.ee.emit('newTimeDurationAfterEdit', this.duration)
       // this.ee.emit('saveTracksToLocalStorage', {tracks:this.tracks, stateName:this.state})
       }
 
@@ -956,6 +944,7 @@ this.ee.emit('audiosources_rendering')
     }
 
     if (this.isPlaying()) {
+
       return this.restartPlayFrom(start, end);
     }
 
@@ -1040,7 +1029,6 @@ this.ee.emit('audiosources_rendering')
       this.soloedTracks = [];
       this.mutedTracks = [];
       this.playoutPromises = [];
-
       this.cursor = 0;
       this.playbackSeconds = 0;
       this.duration = 0;
@@ -1106,7 +1094,7 @@ this.ee.emit('audiosources_rendering')
 
     if (this.isPlaying()) {
       const playbackSeconds = cursorPos + elapsed;
-      this.ee.emit("timeupdate", playbackSeconds);
+      // this.ee.emit("timeupdate", playbackSeconds);
       this.animationRequest = window.requestAnimationFrame(() => {
         this.updateEditor(playbackSeconds);
       });
@@ -1120,13 +1108,12 @@ this.ee.emit('audiosources_rendering')
         (this.isSegmentSelection() ? selection.end : this.duration)
       ) {
         this.ee.emit("finished");
+
       }
 
       this.stopAnimation();
 
       this.resetDrawTimer = setTimeout(() => {
-        // when track has finished playing
-        this.ee.emit('fnishedPlaying')
         this.pausedAt = undefined;
         this.lastSeeked = undefined;
         this.setState(this.getState());
@@ -1169,7 +1156,6 @@ this.ee.emit('audiosources_rendering')
       colors: this.colors,
       barWidth: this.barWidth,
       barGap: this.barGap,
-      borderRadius: this.borderRadius
     };
 
     return _defaults({}, data, defaults);
@@ -1216,7 +1202,6 @@ this.ee.emit('audiosources_rendering')
           height: collapsed ? this.collapsedWaveHeight : this.waveHeight,
           barGap: this.barGap,
           barWidth: this.barWidth,
-          borderRadius:this.borderRadius
         })
       );
     });
@@ -1251,7 +1236,9 @@ this.ee.emit('audiosources_rendering')
 
     containerChildren.push(this.renderTrackSection());
 
-
+    // if (this.annotationList.length) {
+      // containerChildren.push(this.renderAnnotations());
+    // }
 
     containerChildren.push(this.renderAnnotations());
 
