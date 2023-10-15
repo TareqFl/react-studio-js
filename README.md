@@ -1,13 +1,16 @@
 # React-Studio
 
-https://github.com/naomiaro/waveform-playlist/tags
 
-![Screenshot](img/stemtracks.png?raw=true "stem tracks mute solo volume control")
-(code for picture shown can be found in ghpages/\_examples/04stemtracks.html)
 
-![Screenshot](img/annotations.png?raw=true "Aeneas annotations adjust alignment json export")
+![Screenshot](img/ref_1.png?raw=true "stem tracks mute solo volume control")
 
-![Screenshot](img/effects.png?raw=true " Effects")
+features
+Record track
+cut
+split
+shift track
+CRUD operations for Annotations
+
 
 ## Browser Support
 
@@ -19,14 +22,61 @@ react-studio requires webaudio in the browser to function correctly: [Can I Use?
 
 ## Basic Usage
 
-https://github.com/naomiaro/waveform-playlist/blob/main/examples/basic-html/
+https://github.com/TareqFl/react-studio-example
 
-https://github.com/naomiaro/waveform-playlist/tree/main/examples/basic-express/
+
 
 ```javascript
-import WaveformPlaylist from "react-studio";
+import ReactStudio from "react-studio";
 
-var playlist = WaveformPlaylist({
+
+  // =============Annotations Actions================>
+  const actions = [
+    {
+      class: 'fas.fa-play',
+      title: 'Play Annotation',
+      action: (annotation) => {
+        ee.emit('play', annotation.start, annotation.end);
+      },
+    },
+    {
+      class: 'fas.fa-plus',
+      title: 'Insert New Annotation',
+      action: (annotation, i, annotations, opts) => {
+        if (i === annotations.length - 1) {
+          return console.log('not possible');
+        }
+
+        let newIndex = i + 1;
+        const newAnnotation = {
+          id: String(newIndex),
+          start: annotation.end,
+          end: annotations[i + 1].start,
+          lines: ['New Draft'],
+          lang: 'en',
+        };
+
+        annotations.forEach((ann, indx) => {
+          if (indx >= newIndex) {
+            return (ann.id = String(indx + 1));
+          }
+        });
+        annotations.splice(i + 1, 0, newAnnotation);
+      },
+    },
+
+    {
+      class: 'fas.fa-trash',
+      title: 'Delete annotation',
+      action: (annotation, i, annotations) => {
+        annotations.splice(i, 1);
+      },
+    },
+  ];
+
+  // =============Annotations Actions================>
+
+var playlist = ReactStudio({
   samplesPerPixel: 3000,
   mono: true,
   waveHeight: 70,
@@ -57,13 +107,13 @@ var playlist = WaveformPlaylist({
 playlist
   .load([
     {
-      src: "media/audio/Vocals30.mp3",
-      name: "Vocals",
-      gain: 0.5,
+      src: "track 1 source",
+      name: "name",
+      gain: 1,
     },
     {
-      src: "media/audio/BassDrums30.mp3",
-      name: "Drums",
+      src: "track 2 source",
+      name: "name",
       start: 8.5,
       fadeIn: {
         duration: 0.5,
@@ -72,16 +122,6 @@ playlist
         shape: "logarithmic",
         duration: 0.5,
       },
-    },
-    {
-      src: "media/audio/Guitar30.mp3",
-      name: "Guitar",
-      start: 23.5,
-      fadeOut: {
-        shape: "linear",
-        duration: 0.5,
-      },
-      cuein: 15,
     },
   ])
   .then(function () {
@@ -220,7 +260,7 @@ var options = {
 
     // pass a custom function which will receive the mastergainnode for this playlist and the audio context's destination.
     // if you pass a function, you must connect these two nodes to hear sound at minimum.
-    // if you need to clean something up when the graph is disposed, return a cleanup function. Waveform Playlist will cleanup the nodes passed as arguments.
+    // if you need to clean something up when the graph is disposed, return a cleanup function. React-studio will cleanup the nodes passed as arguments.
     effects: function (masterGainNode, destination, isOffline) {
       // analyser nodes don't work offline.
       if (!isOffline) masterGainNode.connect(analyser);
@@ -240,10 +280,10 @@ var options = {
 ```javascript
 {
   // a media path for XHR, a Blob, a File, or an AudioBuffer object.
-  src: 'media/audio/BassDrums30.mp3',
+  src: 'track source .mp3 .wav',
 
   // name that will display in the playlist control panel.
-  name: 'Drums',
+  name: 'name',
 
   // volume level of the track between [0-1]
   gain: 1,
@@ -321,7 +361,7 @@ var options = {
 
   // pass a custom function which will receive the last graphnode for this track and the mastergainnode.
   // if you pass a function, you must connect these two nodes to hear sound at minimum.
-  // if you need to clean something up when the graph is disposed, return a cleanup function. Waveform Playlist will cleanup the nodes passed as arguments.
+  // if you need to clean something up when the graph is disposed, return a cleanup function. React-studio will cleanup the nodes passed as arguments.
   effects: function(graphEnd, masterGainNode, isOffline) {
     var reverb = new Tone.Reverb(1.2);
 
@@ -338,11 +378,11 @@ var options = {
 
 ### Playlist Events
 
-Waveform Playlist uses an instance of [event-emitter](https://www.npmjs.com/package/event-emitter) to send & receive messages from the playlist.
+React-studio uses an instance of [event-emitter](https://www.npmjs.com/package/event-emitter) to send & receive messages from the playlist.
 
 ```javascript
 import EventEmitter from "event-emitter";
-import WaveformPlaylist from "waveform-playlist-updated";
+import ReactStudio from "react-studio";
 
 var playlist = WaveformPlaylist(
   {
