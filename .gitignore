@@ -1,0 +1,11 @@
+node_modules/
+.next/
+# compiled files
+/build
+.sass-cache
+/styles
+lib
+.DS_Store
+test/.DS_Store
+ghpages/.jekyll-cache/
+dist/waveform-playlist/scss
