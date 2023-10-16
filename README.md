@@ -13,7 +13,8 @@ save to local storage(optional)
 
 ## Demo
 
-[React-Studio-Example](https://tareqfl.github.io/react-studio-js-example/)
+[React Example](https://react-studio-js-example.vercel.app/)
+[React Example Github](https://github.com/TareqFl/react-studio-js-example)
 
 ## Browser Support
 
