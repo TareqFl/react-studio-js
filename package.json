@@ -1,5 +1,5 @@
 {
-  "name": "react-studiojs",
+  "name": "react-studio-js",
   "description": "Multiple track web audio editor and player with waveform preview and annotation.",
   "version": "0.0.0",
   "main": "build/react-studio.umd.js",

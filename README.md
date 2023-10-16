@@ -1,6 +1,4 @@
-# React-Studio-JS
-
-
+# React-react-studio-js
 
 ![Screenshot](img/ref_1.png?raw=true "stem tracks mute solo volume control")
 
@@ -11,7 +9,11 @@ split,
 shift track,
 CRUD operations for Annotations,
 save to local storage(optional)
+![Screenshot](img/ref_2.png?raw=true "add annotations and crud operations")
 
+## Demo
+
+[React-Studio-Example](https://tareqfl.github.io/react-studio-js-example/)
 
 ## Browser Support
 
@@ -23,85 +25,86 @@ react-studio-js requires webaudio in the browser to function correctly: [Can I U
 
 ## Basic Usage
 
+https://react-studio-js-example.vercel.app/
+
+## GitHub Reactjs example
 https://github.com/TareqFl/react-studio-js-example
-
-
 
 ```javascript
 import ReactStudio from "react-studio-js";
 
-
-  // =============Annotations Actions================>
-  const actions = [
-    {
-      class: 'fas.fa-play',
-      title: 'Play Annotation',
-      action: (annotation) => {
-        ee.emit('play', annotation.start, annotation.end);
-      },
+// =============Annotations Actions================>
+const actions = [
+  {
+    class: "fas.fa-play",
+    title: "Play Annotation",
+    action: (annotation) => {
+      ee.emit("play", annotation.start, annotation.end);
     },
-    {
-      class: 'fas.fa-plus',
-      title: 'Insert New Annotation',
-      action: (annotation, i, annotations, opts) => {
-        if (i === annotations.length - 1) {
-          return console.log('not possible');
+  },
+  {
+    class: "fas.fa-plus",
+    title: "Insert New Annotation",
+    action: (annotation, i, annotations, opts) => {
+      if (i === annotations.length - 1) {
+        return console.log("not possible");
+      }
+
+      let newIndex = i + 1;
+      const newAnnotation = {
+        id: String(newIndex),
+        start: annotation.end,
+        end: annotations[i + 1].start,
+        lines: ["New Draft"],
+        lang: "en",
+      };
+
+      annotations.forEach((ann, indx) => {
+        if (indx >= newIndex) {
+          return (ann.id = String(indx + 1));
         }
-
-        let newIndex = i + 1;
-        const newAnnotation = {
-          id: String(newIndex),
-          start: annotation.end,
-          end: annotations[i + 1].start,
-          lines: ['New Draft'],
-          lang: 'en',
-        };
-
-        annotations.forEach((ann, indx) => {
-          if (indx >= newIndex) {
-            return (ann.id = String(indx + 1));
-          }
-        });
-        annotations.splice(i + 1, 0, newAnnotation);
-      },
+      });
+      annotations.splice(i + 1, 0, newAnnotation);
     },
+  },
 
-    {
-      class: 'fas.fa-trash',
-      title: 'Delete annotation',
-      action: (annotation, i, annotations) => {
-        annotations.splice(i, 1);
-      },
+  {
+    class: "fas.fa-trash",
+    title: "Delete annotation",
+    action: (annotation, i, annotations) => {
+      annotations.splice(i, 1);
     },
-  ];
+  },
+];
 
-  // =============Annotations Actions================>
+// =============Annotations Actions================>
 
 var playlist = ReactStudio({
   samplesPerPixel: 3000,
   mono: true,
   waveHeight: 70,
+  timescale: true,
   container: document.getElementById("playlist"),
   state: "cursor",
-   colors: {
-              waveOutlineColor: '#222B36',
-              timeColor: 'grey',
-              fadeColor: 'black',
-            },
-    controls: {
-              show: true,
-              width: 175,
-              widgets: {
-                collapse: false,
-              },
-            },
-    annotationList: {
-              annotations: [],
-              controls: actions,
-              editable: true,
-              isContinuousPlay: false,
-              linkEndpoints: false,
-            },
+  colors: {
+    waveOutlineColor: "#222B36",
+    timeColor: "grey",
+    fadeColor: "black",
+  },
+  controls: {
+    show: true,
+    width: 175,
+    widgets: {
+      collapse: false,
+    },
+  },
+  annotationList: {
+    annotations: [],
+    controls: actions,
+    editable: true,
+    isContinuousPlay: false,
+    linkEndpoints: false,
+  },
   zoomLevels: [500, 1000, 3000, 5000],
 });
 
@@ -433,37 +436,37 @@ An example of using the event emitter to control the playlist can be found in [/
 
 #### Events to Listen to
 
-| event                     | arguments                       | description                                                                                                                                                                                                         |
-| ------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `select`                  | `start, end, track`             | Cursor selection has occurred from `start` to `end` with active Track `track`.                                                                                                                                      |
-| `timeupdate`              | `playbackPosition`              | Sends current position of playout `playbackPosition` in seconds.                                                                                                                                                    |
-| `scroll`                  | `scrollLeft`                    | Sends current position of scroll `scrollLeft` in seconds.                                                                                                                                                           |
-| `statechange`             | `state`                         | Sends current interaction state `state`.                                                                                                                                                                            |
-| `shift`                   | `deltaTime, track`              | Sends `deltaTime` in seconds change for Track `track`                                                                                                                                                               |
-| `mute`                    | `track`                         | Mute button has been pressed for `track`                                                                                                                                                                            |
-| `solo`                    | `track`                         | Solo button has been pressed for `track`                                                                                                                                                                            |
-| `enableCut`               | `boolean`                       | Emits a boolean value when a region is made  (optional)                                                                                                                                                             |
-| `enableSplit`             | `boolean`                       | Emits a boolean value  to enable split (optional)                                                                                                                                                                   |
-| `removeTrack`             | `track`                         | Remove button has been pressed for `track`                                                                                                                                                                          |
-| `removeTrackFromDb`       | `track`                         | Event listener to remove track from local storage (opotional)`track`                                                                                                                                                                             |
-| `saveTracksToLocalStorage`| `track`                         | Event listener for track update and save to local storage (optional) `track`                                                                                                                                                                             |
-| `saveToLocalFromSplit`    | `track`                         | Event listener for track update on split  and save to local storage(optional)`track`                                                                                                                                                                    |
-| `getTrackDuration`        | `playlist duration`             | Event listener for playlist duration.                                                                                                                                                                               |
-| `newTimeDurationAfterEdit`| `playlist duration`             | Event listener for playlist duration after edit.                                                                                                                                                                    |
-| `changeTrackView`         | `track, opts`                   | Collapse button has been pressed for `track`                                                                                                                                                                        |
-| `volumechange`            | `volume, track`                 | Volume of `track` has changed to `volume` (0-100)                                                                                                                                                                   |
-| `mastervolumechange`      | `volume`                        | Master volume of the playlist has changed to `volume` (0-100)                                                                                                                                                       |
-| `audiorequeststatechange` | `state, src`                    | Loading audio `src` (`string` or `File`) is now in state (Number)   UNINITIALIZED = 0, LOADING = 1, DECODING = 2,FINISHED = 3,                                                                                      |
-| `loadprogress`            | `percent, src`                  | Loading audio `src` has loaded percent `percent` (0-100)                                                                                                                                                            |
-| `audiosourcesloaded`      | _none_                          | Audio decoding has finished for all tracks                                                                                                                                                                          |
-| `tracksUpdated`           | `boolean`                       | Event Listener when tracks are loaded that recieves a bool.                                                                                                                                                         |
-| `audiosourcesrendered`    | _none_                          | Tracks are rendered to the playlist                                                                                                                                                                                 |
-| `tracksLeft`              | _none_                          | Tracks remaining in the playlist.                                                                                                                                                                                   |
-| `audiosourceserror`       | `err`                           | Error thrown while loading tracks                                                                                                                                                                                   |
-| `finished`                | _none_                          | Event fired when cursor ( while playing ) reaches the end (maximum duration)                                                                                                                                        |
-| `audiorenderingstarting`  | `offlineCtx, setUpPromiseArray` | Event fired after the OfflineAudioContext is created before any rendering begins. If any setup is async before offline redering, push a promise to the setUpPromiseArray.                                           |
-| `audiorenderingfinished`  | `type, data`                    | Return the result of the rendering in the desired format. `type` can be `buffer` or `wav` and can be used to dertermine the `data` type. When `type` is `wav`, data is a `blob` object that represent the wav file. |
-| `stereopan`               | `panvalue, track`               | Pan value of `track` has been changed to `panvalue`                                                                                                                                                                 |
+| event                      | arguments                       | description                                                                                                                                                                                                         |
+| -------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `select`                   | `start, end, track`             | Cursor selection has occurred from `start` to `end` with active Track `track`.                                                                                                                                      |
+| `timeupdate`               | `playbackPosition`              | Sends current position of playout `playbackPosition` in seconds.                                                                                                                                                    |
+| `scroll`                   | `scrollLeft`                    | Sends current position of scroll `scrollLeft` in seconds.                                                                                                                                                           |
+| `statechange`              | `state`                         | Sends current interaction state `state`.                                                                                                                                                                            |
+| `shift`                    | `deltaTime, track`              | Sends `deltaTime` in seconds change for Track `track`                                                                                                                                                               |
+| `mute`                     | `track`                         | Mute button has been pressed for `track`                                                                                                                                                                            |
+| `solo`                     | `track`                         | Solo button has been pressed for `track`                                                                                                                                                                            |
+| `enableCut`                | `boolean`                       | Emits a boolean value when a region is made (optional)                                                                                                                                                              |
+| `enableSplit`              | `boolean`                       | Emits a boolean value to enable split (optional)                                                                                                                                                                    |
+| `removeTrack`              | `track`                         | Remove button has been pressed for `track`                                                                                                                                                                          |
+| `removeTrackFromDb`        | `track`                         | Event listener to remove track from local storage (opotional)`track`                                                                                                                                                |
+| `saveTracksToLocalStorage` | `track`                         | Event listener for track update and save to local storage (optional) `track`                                                                                                                                        |
+| `saveToLocalFromSplit`     | `track`                         | Event listener for track update on split and save to local storage(optional)`track`                                                                                                                                 |
+| `getTrackDuration`         | `playlist duration`             | Event listener for playlist duration.                                                                                                                                                                               |
+| `newTimeDurationAfterEdit` | `playlist duration`             | Event listener for playlist duration after edit.                                                                                                                                                                    |
+| `changeTrackView`          | `track, opts`                   | Collapse button has been pressed for `track`                                                                                                                                                                        |
+| `volumechange`             | `volume, track`                 | Volume of `track` has changed to `volume` (0-100)                                                                                                                                                                   |
+| `mastervolumechange`       | `volume`                        | Master volume of the playlist has changed to `volume` (0-100)                                                                                                                                                       |
+| `audiorequeststatechange`  | `state, src`                    | Loading audio `src` (`string` or `File`) is now in state (Number) UNINITIALIZED = 0, LOADING = 1, DECODING = 2,FINISHED = 3,                                                                                        |
+| `loadprogress`             | `percent, src`                  | Loading audio `src` has loaded percent `percent` (0-100)                                                                                                                                                            |
+| `audiosourcesloaded`       | _none_                          | Audio decoding has finished for all tracks                                                                                                                                                                          |
+| `tracksUpdated`            | `boolean`                       | Event Listener when tracks are loaded that recieves a bool.                                                                                                                                                         |
+| `audiosourcesrendered`     | _none_                          | Tracks are rendered to the playlist                                                                                                                                                                                 |
+| `tracksLeft`               | _none_                          | Tracks remaining in the playlist.                                                                                                                                                                                   |
+| `audiosourceserror`        | `err`                           | Error thrown while loading tracks                                                                                                                                                                                   |
+| `finished`                 | _none_                          | Event fired when cursor ( while playing ) reaches the end (maximum duration)                                                                                                                                        |
+| `audiorenderingstarting`   | `offlineCtx, setUpPromiseArray` | Event fired after the OfflineAudioContext is created before any rendering begins. If any setup is async before offline redering, push a promise to the setUpPromiseArray.                                           |
+| `audiorenderingfinished`   | `type, data`                    | Return the result of the rendering in the desired format. `type` can be `buffer` or `wav` and can be used to dertermine the `data` type. When `type` is `wav`, data is a `blob` object that represent the wav file. |
+| `stereopan`                | `panvalue, track`               | Pan value of `track` has been changed to `panvalue`                                                                                                                                                                 |
 
 ## Tests
 
