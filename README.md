@@ -1,4 +1,4 @@
-# React-react-studio-js
+# React-studio-js
 
 ![Screenshot](img/ref_1.png?raw=true "stem tracks mute solo volume control")
 
