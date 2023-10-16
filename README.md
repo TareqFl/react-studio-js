@@ -14,6 +14,9 @@ save to local storage(optional)
 ## Demo
 
 [React Example](https://react-studio-js-example.vercel.app/)
+
+## Github
+
 [React Example Github](https://github.com/TareqFl/react-studio-js-example)
 
 ## Browser Support
@@ -29,6 +32,7 @@ react-studio-js requires webaudio in the browser to function correctly: [Can I U
 https://react-studio-js-example.vercel.app/
 
 ## GitHub Reactjs example
+
 https://github.com/TareqFl/react-studio-js-example
 
 ```javascript
