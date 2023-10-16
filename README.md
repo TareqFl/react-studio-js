@@ -15,10 +15,6 @@ save to local storage(optional)
 
 [React Example](https://react-studio-js-example.vercel.app/)
 
-## Github
-
-[React Example Github](https://github.com/TareqFl/react-studio-js-example)
-
 ## Browser Support
 
 react-studio-js requires webaudio in the browser to function correctly: [Can I Use?](http://caniuse.com/#search=webaudio)
@@ -26,10 +22,6 @@ react-studio-js requires webaudio in the browser to function correctly: [Can I U
 ## Installation
 
 `npm i react-studio-js`
-
-## Basic Usage
-
-https://react-studio-js-example.vercel.app/
 
 ## GitHub Reactjs example
 
