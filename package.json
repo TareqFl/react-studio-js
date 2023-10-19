@@ -3,7 +3,7 @@
   "description": "Multiple track web audio editor and player with waveform preview and annotation.",
   "version": "0.1.0",
   "main": "build/waveform-playlist.umd.js",
-  "author": "tareqfl",
+  "author": "Tareq Fleyfel",
   "license": "MIT",
   "website": "https://github.com/TareqFl",
   "devDependencies": {
@@ -59,7 +59,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TareqFl/react-studio.git"
+    "url": "git+https://github.com/TareqFl/react-studio-js.git"
   },
   "keywords": [
     "waveform",
