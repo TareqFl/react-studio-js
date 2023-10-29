@@ -11,9 +11,16 @@ CRUD operations for Annotations,
 save to local storage(optional)
 ![Screenshot](img/ref_2.png?raw=true "add annotations and crud operations")
 
+## TS Demo
+
+[NextJS 13 + TS Example](https://react-studio-js-next.vercel.app/)
+[Github NextJS 13 + TS Example](https://github.com/TareqFl/react-studio-js-Next)
+--
+[Type Declaration file github](https://github.com/TareqFl/-types-react-studio-js)
+
 ## Demo
 
-[React Example](https://react-studio-js-example.vercel.app/)
+[React-vite Example](https://react-studio-js-example.vercel.app/)
 
 ## Browser Support
 
