@@ -1,7 +1,7 @@
 {
   "name": "react-studio-js",
   "description": "Multiple track web audio editor and player with waveform preview and annotation.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "build/waveform-playlist.umd.js",
   "author": "Tareq Fleyfel",
   "license": "MIT",
